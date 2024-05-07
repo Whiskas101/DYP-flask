@@ -2,6 +2,8 @@
 
 A `Flask` API that filters through the bloat to deliver the relevant student information in a JSON format, ready to be used by any application.
 
+[Here is the official site for reference.](https://mydy.dypatil.edu/rait/)
+
 ## Setup Instructions
 
 The following command will install every dependency needed for the API to run. 
