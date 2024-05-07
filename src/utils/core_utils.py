@@ -8,7 +8,10 @@ import requests
 
 
 def attempt_login(username:str, password:str, session = None):
-
+    """
+        Creates a requests.session, makes a POST request to the LMS site, upon success, it writes
+        the session cookies to the flask session object, to be used for future requests
+    """
     session = requests.session()
 
     USER_DATA = {
@@ -37,7 +40,16 @@ def attempt_login(username:str, password:str, session = None):
 
 
 def get_subjects(cookies) -> list[dict]:
-
+    """
+        Creates a session objects, attaches the login cookies to this instance, and makes the fetch request for the subjects
+        Returns a JSON Object containing subject details:
+            - Name
+            - Instructor
+            - Attendance
+            - Link
+            - Course ID
+    """
+    
     session = requests.session()
 
     #Insert the session cookies
@@ -51,4 +63,25 @@ def get_subjects(cookies) -> list[dict]:
     
 
     return subjects
+
+
+def get_subject_materials(link, cookies):
+    """
+        Fetches the given link, and returns a JSON containing links to the resource and titles
+        TODO: Need to implement some sort of "downlaoder than can handle different "hidden" links to get the pdf/docx/pptx downloaded.
+        
+    """
+    
+    session = requests.session()
+    session.cookies = requests.utils.cookiejar_from_dict(cookie_dict=cookies)
+    
+    response = session.get(link)
+    #get the string version of the response to pass to the parser
+    response = response.content
+    
+    material_json = PARSE.parse_materials(response)
+    
+    
+    return material_json
+
     

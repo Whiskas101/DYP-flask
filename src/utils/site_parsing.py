@@ -2,6 +2,8 @@
 from bs4 import BeautifulSoup
 
 
+
+
 def parse_subjects(html) -> list[dict]:
     """
         Creates a BeautifulSoup object that finds each subject block,
@@ -33,15 +35,46 @@ def parse_subjects(html) -> list[dict]:
         #Subject links
         subject_link = soup.find('a')
         subject_link = subject_link['href']
+        
+        #Course id
+        course_id = subject_link[-4:]
 
         subject_dict = {
             'name':subject_name,
             'instructor':subject_instructor,
             'attendance':subject_attendance,
-            'link':subject_link
+            'link':subject_link,
+            'course_id':course_id
         }
         
         result.append(subject_dict)
         
     return result
     
+
+def parse_materials(html) -> list[dict]:
+    
+    soup = BeautifulSoup(html, 'lxml')
+    
+    activities = soup.select(".activityinstance")
+
+    # SELECTING all anchor tags, seems to give me access to past semester and all their contents!
+    result = []
+    for activity in activities:
+        soup = BeautifulSoup(str(activity), 'lxml')
+        link = soup.select_one("a")
+        link = link['href']
+        print(link)
+        
+        name = soup.find("span")
+        name = name.contents[0]
+        
+        activity_object = {
+            'name':name,
+            'link':link
+        }
+        
+        result.append(activity_object)
+        
+
+    return result

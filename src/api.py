@@ -37,6 +37,7 @@ def login():
 @app.route('/subjects', methods=['GET'])
 def subjects():
     cookies = session['session_cookie']
+    print(cookies)
     #Maybe a decorator, or an if statement can be implemented here to avoid cookies being empty (user session ended/user log out)
     #potential boost in readability here, by using a decorator to validate the existence of a session cookie instead
 
@@ -45,7 +46,17 @@ def subjects():
     print(response)
     return response
 
+@app.route('/material', methods=['POST'])
+def subject_material():
+    if request.method == "POST":
+        target_link = request.form.get('link') # this link must be of the form https://mydy.dypatil.edu/rait/course/view.php?id=[SUBJECT_ID]
 
+        cookies = session['session_cookie']
+        
+        response = core_utils.get_subject_materials(target_link, cookies=cookies)
+        
+        return response
+        
 if __name__ == "__main__":
     app.run()
 
