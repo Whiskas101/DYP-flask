@@ -81,7 +81,7 @@ def get_subjects(cookies) -> list[dict]:
 def get_subject_materials(link : str , cookies) -> list[dict]:
     """
         Fetches the given link, and returns a JSON containing links to the resource and titles
-        TODO: Need to implement some sort of "downloader than can handle different "hidden" links to get the pdf/docx/pptx downloaded.
+        TODO: Need to implement some sort of "downloader" that can handle different "hidden" links to get the pdf/docx/pptx downloaded.
         
         Parameters:
             link (str): The subject link to be fetched and processed
