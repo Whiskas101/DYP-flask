@@ -22,7 +22,7 @@ The API was built using python3.10 on Windows Subsystem for Linux.
 ## How it works
 
 ### Overview
-The Official site is often slow to load, has session cookies that expire quickly, and redirects the user a bit too much. It also prevents downloading of study materials, which combined with its unreliable speed, and a hard-to-use PDF viewer.
+The Official site is often slow to load, has session cookies that expire quickly, and redirects the user a bit too much. It also prevents downloading of study materials, which combined with its unreliable speed, and a hard-to-use PDF viewer makes for an uncomfortable experience.
 
 These, and some other issues are addressed. The DYP-Flask API only fetches the data that is relevant and most commonly fetched. That being the Student Attendance Stat & Subject specific .ppt/.pdf/.docx files. This is achieved by manually isolating the requests that contain this information, and only loading that specific part of the page. Since the website uses server side rendering, the returned content has to be parsed and packaged into JSON objects. The application can then implement caching to prevent unnecessary login requests, for merely seeing the data stored.
 
