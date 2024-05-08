@@ -117,18 +117,13 @@ def get_download_link(link : str, cookies):
     """
     
     # TODO: Implement a check to determine the kind of link (3-4 types exist I believe)
-    
     with requests.session() as session:
             
-        
         session.cookies = requests.utils.cookiejar_from_dict(cookie_dict=cookies)
-        def log_request(response, *args, **kwargs):
-            print("Request URL:", response.request.url)
-            print("Request Headers:", response.request.headers)
-            print("Request Body:", response.request.body)
-            
-        session.hooks['response'] = [log_request]
+
         response = session.get(link)
+        
+        #parsing the response to extract the link
         
         return response.content
         

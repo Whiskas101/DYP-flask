@@ -102,3 +102,10 @@ def parse_materials(html : str) -> list[dict]:
 
     return course_materials
 
+
+def parse_resource_link(html: str) -> str:
+    # ideally there should be only one link, and I will proceed accordingly
+    # It's not known whether there can be multiple links uploaded within an activity instance in the official site.
+    
+    
+    
