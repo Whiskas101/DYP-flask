@@ -46,7 +46,7 @@ def subjects():
     print(response)
     return response
 
-@app.route('/material', methods=['POST'])
+@app.route('/materials', methods=['POST'])
 def subject_material():
     if request.method == "POST":
         target_link = request.form.get('link') # this link must be of the form https://mydy.dypatil.edu/rait/course/view.php?id=[SUBJECT_ID]
@@ -56,6 +56,19 @@ def subject_material():
         response = core_utils.get_subject_materials(target_link, cookies=cookies)
         
         return response
+
+@app.route('/download', methods=['POST'])
+def download_resource():
+    
+    if request.method == "POST":
+        target_link = request.form.get('link') #this link must be of the form https://https://mydy.dypatil.edu/rait/mod/flexpaper/view.php?id=606779
+                                                # or https://mydy.dypatil.edu/rait/mod/presentation/view.php?id=611990
+        cookies = session['session_cookie']
+        
+        response = core_utils.get_download_link(target_link, cookies)
+        
+        return response
+    
         
 if __name__ == "__main__":
     app.run()

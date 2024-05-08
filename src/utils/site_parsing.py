@@ -1,18 +1,26 @@
-
 from bs4 import BeautifulSoup
 
 
-
-
-def parse_subjects(html) -> list[dict]:
+def parse_subjects(html: str) -> list[dict]:
     """
         Creates a BeautifulSoup object that finds each subject block,
         returns an array of JSON Objects containing Name, Instructor, Attendance & Link
         to that particular subject
+        
+        Parameters:
+            html (str): string object containing the response content (html, inline-css & inline-js code)
+            
+        Returns:
+            subjects (list[dict]): List of dictionary object containing the subject details:\n
+                \t- Name
+                \t- Instructor
+                \t- Attendance
+                \t- Link
+                \t- Course ID
     """
     
     soup = BeautifulSoup(html, 'lxml')
-    result = []
+    subjects = []
     subject_containers = soup.find_all(class_="subcontent-container")
 
     for subject in subject_containers:
@@ -49,17 +57,30 @@ def parse_subjects(html) -> list[dict]:
         
         result.append(subject_dict)
         
-    return result
+    return subjects
     
 
-def parse_materials(html) -> list[dict]:
+def parse_materials(html : str) -> list[dict]:
+    """
+        Similar to parse_subjects, it gets all the "activity" within a subjects, extracts a name and link to that subject, and
+        return an array of JSON Objects containing these properties.
+        
+        Parameters:
+            html (str): string object containing the response content (html, inline-css & inline-js code)
+
+        Returns:
+            course_materials (list[dict]): List of dict objects containing name and link to each course material available for given subject 
+    """
+    
     
     soup = BeautifulSoup(html, 'lxml')
     
     activities = soup.select(".activityinstance")
 
-    # SELECTING all anchor tags, seems to give me access to past semester and all their contents!
-    result = []
+    # SELECTING all anchor tags, seems to give me access to past semester and all their contents, might be useful
+    # Something to look into for the future.
+    
+    course_materials = []
     for activity in activities:
         soup = BeautifulSoup(str(activity), 'lxml')
         link = soup.select_one("a")
@@ -69,12 +90,15 @@ def parse_materials(html) -> list[dict]:
         name = soup.find("span")
         name = name.contents[0]
         
+        #The handling for the different potential scenarios regarding the way the download links have to be made available is 
+        # to be seperated from this request.
         activity_object = {
             'name':name,
             'link':link
         }
         
-        result.append(activity_object)
+        course_materials.append(activity_object)
         
 
-    return result
+    return course_materials
+
