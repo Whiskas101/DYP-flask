@@ -55,7 +55,7 @@ def parse_subjects(html: str) -> list[dict]:
             'course_id':course_id
         }
         
-        result.append(subject_dict)
+        subjects.append(subject_dict)
         
     return subjects
     
