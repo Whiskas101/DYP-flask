@@ -106,6 +106,15 @@ def parse_materials(html : str) -> list[dict]:
 
 
 def parse_resource_link(html: str, link_type: str) -> str:
+    """
+        Given a link to a resource, dyquestion, presentation etc, returns a downloadable link to the content
+        
+        Parameters:
+            html (str) : raw response data that is to be processes
+            link_type (str) : type of the resource [dyquestion, presentation, page, etc]
+    """
+    
+    
     # Currently only supporting a subset of all types, but the most frequently used.
     # It's not known whether there can be multiple links uploaded within an activity instance in the official site.
     
@@ -159,9 +168,15 @@ def parse_resource_link(html: str, link_type: str) -> str:
             return default_parse(soup)
         
         case "dyquestion":
-            # No plans for integrating yet
+            return default_parse(soup)
+
+        case "forum":
+            # Currently I have no plans on supporting a forum via this API
             return None
-    
+        
+        case "quiz":
+            #  quizzes are also not being supported by this API
+            return None
         
         case _:
             return None

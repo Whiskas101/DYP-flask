@@ -50,7 +50,7 @@ def attempt_login(username:str, password:str, session = None):
 def get_subjects(cookies) -> list[dict]:
     
     """
-        Creates a session objects, attaches the login cookies to this instance, and makes the fetch request for the subjects
+        Creates a session object, attaches the login cookies to this instance, and makes the fetch request for the subjects
             
         Parameters:
             cookies (dict): Cookies generated upon login action done on the official site
@@ -81,7 +81,7 @@ def get_subjects(cookies) -> list[dict]:
 def get_subject_materials(link : str , cookies) -> list[dict]:
     """
         Fetches the given link, and returns a JSON containing links to the resource and titles
-        TODO: Need to implement some sort of "downloader" that can handle different "hidden" links to get the pdf/docx/pptx downloaded.
+        
         
         Parameters:
             link (str): The subject link to be fetched and processed
@@ -113,7 +113,9 @@ def get_download_link(link : str, link_type, cookies):
             cookies (dict): Cookies generated upon login action done on the official site
         
         Returns:
-            <Not decided upon yet>
+            An Object containing the following
+            name: name of the file 
+            link: link to the file requested
     """
     
     # TODO: Implement a check to determine the kind of link (3-4 types exist I believe)
@@ -126,9 +128,20 @@ def get_download_link(link : str, link_type, cookies):
         #parsing the response to extract the link
         extracted_link = PARSE.parse_resource_link(response.content, link_type)
         
+        content = None
+        #Return object
+        if (extracted_link != None):
+            
+            start = extracted_link.rfind('/') + 1 #get the last "/" and ahead of it, is the file name
+            name = extracted_link[start:]
+            content = {
+                'name': name,
+                'link': extracted_link
+            }
+            
         
         
-        return extracted_link
+        return content
         
         
     

@@ -9,7 +9,7 @@ from utils import core_utils
 app = Flask(__name__)
 app.secret_key = 'this_college_fucking_suckss'
 
-@app.route('/test')
+@app.route('/')
 def hello_warudo():
     return f'''
         向かって来るのか？\n
@@ -73,9 +73,10 @@ def download_resource():
         
         return response
     
+    
         
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True, host='0.0.0.0', port=5000)
 
 
 
