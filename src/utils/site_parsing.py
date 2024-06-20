@@ -114,9 +114,8 @@ def parse_resource_link(html: str, link_type: str) -> str:
     soup = BeautifulSoup(html, 'lxml')
     
     
-    #CASE II (successfully done | although I want to do more testing on other links to ensure it's robustness) 
-    #extracting url from flexpaper type of page (response2)
-    
+
+    # This method extracts the link from the javascript code that loads the actual document
     def flexpaper_parse(soup):
         #find the script that handles "displaying the pdf file within the custom (flexpaper) pdf viewer"
         script_tag = soup.find('script', string=re.compile(r"\$\(.*?\).FlexPaperViewer"))
@@ -136,6 +135,7 @@ def parse_resource_link(html: str, link_type: str) -> str:
                 print("Did not find the link within flexpaper config")
                 return None
     
+    #This method is slightly slower as it extracts after loading a new page.
     def default_parse(soup):
         presentation_content = soup.find('div', attrs={'role':'main'})
 
@@ -175,5 +175,3 @@ def parse_resource_link(html: str, link_type: str) -> str:
     
     
     
-    
-print(len("https://mydy.dypatil.edu/rait/mod/"))
