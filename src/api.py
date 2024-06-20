@@ -7,7 +7,7 @@ from flask import Flask, request, session
 from utils import core_utils
 
 app = Flask(__name__)
-app.secret_key = 'this_college_fucking_sucks'
+app.secret_key = 'this_college_fucking_suckss'
 
 @app.route('/test')
 def hello_warudo():
@@ -25,17 +25,20 @@ def login():
         
         # Send login request to the dypatil site
         response = core_utils.attempt_login(username=username, password=password)
-
+        # print(response)
         #set the session cookie obtained previously
         session['session_cookie'] = response
+        print("Session:", session)
 
 
         #return the cookies of the session object, or the status code if it fails to login
         return response
 
-
 @app.route('/subjects', methods=['GET'])
 def subjects():
+    print(request.headers)
+    print("Session:", session)
+    print(f"HERE ARE THE COOKIES: {session}")
     cookies = session['session_cookie']
     print(cookies)
     #Maybe a decorator, or an if statement can be implemented here to avoid cookies being empty (user session ended/user log out)
@@ -43,7 +46,7 @@ def subjects():
 
     response = core_utils.get_subjects(cookies=cookies)
 
-    print(response)
+    # print(response)
     return response
 
 @app.route('/materials', methods=['POST'])
@@ -63,9 +66,10 @@ def download_resource():
     if request.method == "POST":
         target_link = request.form.get('link') #this link must be of the form https://https://mydy.dypatil.edu/rait/mod/flexpaper/view.php?id=606779
                                                 # or https://mydy.dypatil.edu/rait/mod/presentation/view.php?id=611990
+        link_type = request.form.get('type')
         cookies = session['session_cookie']
         
-        response = core_utils.get_download_link(target_link, cookies)
+        response = core_utils.get_download_link(target_link, link_type, cookies)
         
         return response
     

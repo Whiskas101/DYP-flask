@@ -1,0 +1,33 @@
+<script>
+    function read()
+    {
+        document.getElementById('readmore').style.display = 'block';
+        document.getElementById('readless').style.display = 'none';
+        document.getElementById('myDiv').style.display = 'none';
+    }
+    function loadXMLDoc(path)
+    {
+//alert(path);
+        document.getElementById('readmore').style.display = 'none';
+        document.getElementById('myDiv').style.display = 'block';
+        var xmlhttp;
+        if (window.XMLHttpRequest)
+        {
+            xmlhttp = new XMLHttpRequest();
+        }
+        else
+        {
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function ()
+        {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+            {
+                document.getElementById("myDiv").innerHTML = xmlhttp.responseText;
+            }
+        }
+        xmlhttp.open("GET", path + "/blocks/academic_status/more.php", true);
+        xmlhttp.send();
+    }
+</script>
+<div class=block_academic_status_exceptionmsg> Presently there is no active semester</div>

@@ -29,11 +29,11 @@ def attempt_login(username:str, password:str, session = None):
         response = session.post(
             url=SITE.AUTH_URL,
             data=USER_DATA,
-            stream=True  #set it to stream || to test ; non stream version seems to respond faster, need to investigate
+            #stream=True  #set it to stream || to test ; non stream version seems to respond faster, need to investigate
         )
         
-        response.close() #instantly close the response, as we dont need the 80,000+ character response that contains irrelevant data (html, inline css, and javascript)
-
+        #response.close() #instantly close the response, as we dont need the 80,000+ character response that contains irrelevant data (html, inline css, and javascript)
+        # print("NEG!!!====",response.content)
         print(session.cookies)
         #Successful login
         if response.status_code == 200:
@@ -48,6 +48,7 @@ def attempt_login(username:str, password:str, session = None):
 
 
 def get_subjects(cookies) -> list[dict]:
+    
     """
         Creates a session objects, attaches the login cookies to this instance, and makes the fetch request for the subjects
             
@@ -71,9 +72,8 @@ def get_subjects(cookies) -> list[dict]:
 
         html_content = response.content
         #pass the html_content to a custom parsing block, that converts it into a neat json object 
-        
         subjects = PARSE.parse_subjects(html=html_content)
-        
+        print(subjects)
 
         return subjects
 
@@ -104,7 +104,7 @@ def get_subject_materials(link : str , cookies) -> list[dict]:
         return materials_json
 
 
-def get_download_link(link : str, cookies):
+def get_download_link(link : str, link_type, cookies):
     """
         Finds and returns a link to the .pdf, .pptx, or .docx resource for easy downloading.
         
@@ -124,8 +124,11 @@ def get_download_link(link : str, cookies):
         response = session.get(link)
         
         #parsing the response to extract the link
+        extracted_link = PARSE.parse_resource_link(response.content, link_type)
         
-        return response.content
+        
+        
+        return extracted_link
         
         
     

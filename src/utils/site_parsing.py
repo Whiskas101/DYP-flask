@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-
+import re
 
 def parse_subjects(html: str) -> list[dict]:
     """
@@ -89,12 +89,14 @@ def parse_materials(html : str) -> list[dict]:
         
         name = soup.find("span")
         name = name.contents[0]
+        link_type = link[34:-19] # 34 and -19 are just constants to remove the unecessary part of the link
         
         #The handling for the different potential scenarios regarding the way the download links have to be made available is 
         # to be seperated from this request.
         activity_object = {
             'name':name,
-            'link':link
+            'link':link,
+            'type':link_type
         }
         
         course_materials.append(activity_object)
@@ -103,9 +105,75 @@ def parse_materials(html : str) -> list[dict]:
     return course_materials
 
 
-def parse_resource_link(html: str) -> str:
-    # ideally there should be only one link, and I will proceed accordingly
+def parse_resource_link(html: str, link_type: str) -> str:
+    # Currently only supporting a subset of all types, but the most frequently used.
     # It's not known whether there can be multiple links uploaded within an activity instance in the official site.
     
+    # extract the type of link (dyquestion, forum, flexpaper, etc etc)
+    
+    soup = BeautifulSoup(html, 'lxml')
     
     
+    #CASE II (successfully done | although I want to do more testing on other links to ensure it's robustness) 
+    #extracting url from flexpaper type of page (response2)
+    
+    def flexpaper_parse(soup):
+        #find the script that handles "displaying the pdf file within the custom (flexpaper) pdf viewer"
+        script_tag = soup.find('script', string=re.compile(r"\$\(.*?\).FlexPaperViewer"))
+        if script_tag != None:
+            #Extract the PDFFILE link from within its config by means of regex
+            pdf_url_pattern = re.compile(r"PDFFile\s*:\s*'([^']+)'")
+            pdf_url_match = pdf_url_pattern.search(script_tag.string)
+
+            if(pdf_url_match):
+                #successfully found the PDFFILE url
+                pdf_url = pdf_url_match.group(1)
+                print("PDF file URL:", pdf_url)
+                return pdf_url
+                # print(pdf_url_match)
+                
+            else:
+                print("Did not find the link within flexpaper config")
+                return None
+    
+    def default_parse(soup):
+        presentation_content = soup.find('div', attrs={'role':'main'})
+
+        soup = BeautifulSoup(str(presentation_content), 'lxml')
+        link_to_content = soup.find("a")
+        link_to_content = link_to_content['href']
+        
+        print("FIRST: ",link_to_content) 
+        return link_to_content
+    
+    
+    match link_type:
+        
+        case "flexpaper":
+            return flexpaper_parse(soup)
+        
+        case "resource":
+            return default_parse(soup)
+        
+        case "presentation":
+            return default_parse(soup)
+        
+        case "dyquestion":
+            # No plans for integrating yet
+            return None
+    
+        
+        case _:
+            return None
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+print(len("https://mydy.dypatil.edu/rait/mod/"))
