@@ -34,7 +34,8 @@ def attempt_login(username:str, password:str, session = None):
         
         #response.close() #instantly close the response, as we dont need the 80,000+ character response that contains irrelevant data (html, inline css, and javascript)
         # print("NEG!!!====",response.content)
-        print(session.cookies)
+        
+        
         #Successful login
         if response.status_code == 200:
             #convert to a dictionary
@@ -126,6 +127,7 @@ def get_download_link(link : str, link_type, cookies):
         response = session.get(link)
         
         #parsing the response to extract the link
+        
         extracted_link = PARSE.parse_resource_link(response.content, link_type)
         
         content = None

@@ -169,7 +169,10 @@ def parse_resource_link(html: str, link_type: str) -> str:
         
         case "dyquestion":
             return default_parse(soup)
-
+        
+        case "questionpaper":
+            return default_parse(soup)
+        
         case "forum":
             # Currently I have no plans on supporting a forum via this API
             return None
