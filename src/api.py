@@ -1,6 +1,6 @@
 
 # main entry point for the app
-from flask import Flask, request, session
+from flask import Flask, request, session, Response
 
 # For rate limiting the API
 from flask_limiter import Limiter
@@ -11,7 +11,7 @@ from flask_limiter.util import get_remote_address
 from utils import core_utils
 
 app = Flask(__name__)
-app.secret_key = 'this_college_fucking_suckss'
+app.secret_key = 'this_college_fucking_sucks'
 
 limiter = Limiter(
     key_func=get_remote_address,
@@ -42,12 +42,14 @@ def login():
         response = core_utils.attempt_login(username=username, password=password)
         # print(response)
         #set the session cookie obtained previously
-        session['session_cookie'] = response
-        print("Session:", session)
+        if response != None:
+            session['session_cookie'] = response
+            print("Session:", session)
+            return response
 
 
         #return the cookies of the session object, or the status code if it fails to login
-        return response
+        return Response(status=401)
 
 @app.route('/subjects', methods=['GET'])
 @limiter.limit("3 per minute")

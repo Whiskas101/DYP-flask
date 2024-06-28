@@ -38,11 +38,19 @@ def attempt_login(username:str, password:str, session = None):
         
         #Successful login
         if response.status_code == 200:
-            #convert to a dictionary
-            cookie_dict = requests.utils.dict_from_cookiejar(session.cookies)
             
-            # return session.cookies, on a successful login
-            return cookie_dict
+            if response.headers['Content-Type'] == "text/html; charset=utf-8":
+                
+                
+                #convert to a dictionary
+                cookie_dict = requests.utils.dict_from_cookiejar(session.cookies)
+                
+                # return session.cookies, on a successful login
+                return cookie_dict
+            
+            else:
+                #incorrect credentials
+                return None
         
         #if login fails, return the response code
         return response.status_code
