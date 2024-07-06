@@ -6,6 +6,7 @@ click==8.1.7
 Deprecated==1.2.14
 Flask==3.0.3
 Flask-Limiter==3.7.0
+gunicorn==22.0.0
 idna==3.7
 importlib_resources==6.4.0
 itsdangerous==2.2.0
@@ -21,6 +22,7 @@ Pygments==2.18.0
 requests==2.31.0
 rich==13.7.1
 soupsieve==2.5
+tornado==6.4.1
 typing_extensions==4.12.2
 urllib3==2.2.1
 Werkzeug==3.0.3

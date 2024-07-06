@@ -1,3 +1,6 @@
+#for logging
+import logging
+
 
 # main entry point for the app
 from flask import Flask, request, session, Response
@@ -18,9 +21,12 @@ limiter = Limiter(
     storage_uri="memory://" # I know that using default in memory storage is bad practice, but its acceptable for the small scale API that this is
 )                           # This is going on be an a 1gb RAM machine anyway
 
-
 limiter.init_app(app)
 
+logging.basicConfig(
+    level=logging.WARNING,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 
 @app.route('/')
 @limiter.limit("100 per minute")
@@ -44,7 +50,6 @@ def login():
         #set the session cookie obtained previously
         if response != None:
             session['session_cookie'] = response
-            print("Session:", session)
             return response
 
 
@@ -54,17 +59,11 @@ def login():
 @app.route('/subjects', methods=['GET'])
 @limiter.limit("3 per minute")
 def subjects():
-    print(request.headers)
-    print("Session:", session)
-    print(f"HERE ARE THE COOKIES: {session}")
+
     cookies = session['session_cookie']
-    print(cookies)
-    #Maybe a decorator, or an if statement can be implemented here to avoid cookies being empty (user session ended/user log out)
-    #potential boost in readability here, by using a decorator to validate the existence of a session cookie instead
 
     response = core_utils.get_subjects(cookies=cookies)
 
-    # print(response)
     return response
 
 @app.route('/materials', methods=['POST'])
@@ -91,11 +90,16 @@ def download_resource():
         
         response = core_utils.get_download_link(target_link, link_type, cookies)
         
-        return response
-    
+        if(response != None):
+            return response
+
+        return Response(status=401)
     
         
 if __name__ == "__main__":
+    
+    logging.debug(f"Started {__file__} at 0.0.0.0:5000")
+    
     # 0.0.0.0 == every address from 0.0.0.0 to 192.192.192.192
     app.run(
         debug=True, 

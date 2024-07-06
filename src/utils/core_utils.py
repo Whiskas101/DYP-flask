@@ -82,7 +82,7 @@ def get_subjects(cookies) -> list[dict]:
         html_content = response.content
         #pass the html_content to a custom parsing block, that converts it into a neat json object 
         subjects = PARSE.parse_subjects(html=html_content)
-        print(subjects)
+        # print(subjects)
 
         return subjects
 

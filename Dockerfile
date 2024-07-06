@@ -4,7 +4,8 @@ RUN apk update
 RUN apk add py-pip
 RUN pip install --upgrade pip
 
-WORKDIR /app
+
+WORKDIR /app 
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
@@ -13,8 +14,8 @@ COPY src/ .
 
 
 
-EXPOSE 5000
+EXPOSE 8000
 
-CMD ["python3", "api.py"]
+CMD ["gunicorn","-w","2","-b", "0.0.0.0:8000", "api:app"]
 
 

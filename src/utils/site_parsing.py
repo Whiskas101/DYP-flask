@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import re
+import logging
 
 def parse_subjects(html: str) -> list[dict]:
     """
@@ -85,18 +86,25 @@ def parse_materials(html : str) -> list[dict]:
         soup = BeautifulSoup(str(activity), 'lxml')
         link = soup.select_one("a")
         link = link['href']
-        print(link)
+        # print(link)
         
         name = soup.find("span")
         name = name.contents[0]
         link_type = link[34:-19] # 34 and -19 are just constants to remove the unecessary part of the link
         
+        obj = soup.select(".accesshide")
+        doc_type = "unknown"
+        if(len(obj)):
+            doc_type = obj[0].contents[0]
+        # else:
+            # print(obj)
         #The handling for the different potential scenarios regarding the way the download links have to be made available is 
         # to be seperated from this request.
         activity_object = {
             'name':name,
             'link':link,
-            'type':link_type
+            'type':link_type,
+            'doctype':doc_type
         }
         
         course_materials.append(activity_object)
@@ -136,12 +144,12 @@ def parse_resource_link(html: str, link_type: str) -> str:
             if(pdf_url_match):
                 #successfully found the PDFFILE url
                 pdf_url = pdf_url_match.group(1)
-                print("PDF file URL:", pdf_url)
+                # print("PDF file URL:", pdf_url)
                 return pdf_url
                 # print(pdf_url_match)
                 
             else:
-                print("Did not find the link within flexpaper config")
+                logging.debug("Did not find the link within flexpaper config")
                 return None
     
     #This method is slightly slower as it extracts after loading a new page.
@@ -152,7 +160,7 @@ def parse_resource_link(html: str, link_type: str) -> str:
         link_to_content = soup.find("a")
         link_to_content = link_to_content['href']
         
-        print("FIRST: ",link_to_content) 
+        # print("FIRST: ",link_to_content) 
         return link_to_content
     
     
