@@ -22,7 +22,9 @@ def parse_subjects(html: str) -> list[dict]:
     
     soup = BeautifulSoup(html, 'lxml')
     subjects = []
+    
     subject_containers = soup.find_all(class_="subcontent-container")
+    print(len(subject_containers))
 
     for subject in subject_containers:
         #convert to raw string, so it can be parsed after being converted to BS4
@@ -30,6 +32,7 @@ def parse_subjects(html: str) -> list[dict]:
         soup = BeautifulSoup(subject, 'lxml')
 
         #Name
+        
         subject_name = soup.find('h4')
         subject_name = subject_name.contents[0] # getting the data within the actual tag that stored the name
 
@@ -39,7 +42,7 @@ def parse_subjects(html: str) -> list[dict]:
 
         #Subject Attendance
         subject_attendance = soup.select_one('.prg-container > span') #progress container is the weird horizontal graph thingy
-        subject_attendance = subject_attendance.contents[0]
+        subject_attendance = subject_attendance.contents[0] if subject_attendance != None else "0%"
         
         #Subject links
         subject_link = soup.find('a')

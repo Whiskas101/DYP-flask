@@ -24,7 +24,7 @@ limiter = Limiter(
 limiter.init_app(app)
 
 logging.basicConfig(
-    level=logging.WARNING,
+    level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 
@@ -61,6 +61,7 @@ def login():
 def subjects():
 
     cookies = session['session_cookie']
+    logging.debug(f"{cookies} obtained")
 
     response = core_utils.get_subjects(cookies=cookies)
 
@@ -98,13 +99,13 @@ def download_resource():
         
 if __name__ == "__main__":
     
-    logging.debug(f"Started {__file__} at 0.0.0.0:5000")
+    logging.debug(f"Started {__file__} at 0.0.0.0:8000")
     
     # 0.0.0.0 == every address from 0.0.0.0 to 192.192.192.192
     app.run(
         debug=True, 
         host='0.0.0.0', 
-        port=5000
+        port=8000
     )
 
 
