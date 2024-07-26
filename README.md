@@ -37,8 +37,8 @@ The following were used while working on this project:
  - BeautifulSoup with lxml (for extracting data from SSR HTML code, into a `JSON` Object)
 
 ### To Do
-❌ Complete this readme.md file
-❌Handle different types of links: flexpaper, presentation, docx, redirected page with downloadable links
-✅ Rate Limiting, to prevent abuse 
+-❌ Complete this readme.md file
+-❌Handle different types of links: flexpaper, presentation, docx, redirected page with downloadable links
+-✅ Rate Limiting, to prevent abuse 
 
 
