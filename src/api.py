@@ -101,7 +101,7 @@ if __name__ == "__main__":
     
     logging.debug(f"Started {__file__} at 0.0.0.0:8000")
     
-    # 0.0.0.0 == every address from 0.0.0.0 to 192.192.192.192
+    # 0.0.0.0 == every address
     app.run(
         debug=True, 
         host='0.0.0.0', 
