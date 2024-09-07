@@ -101,6 +101,7 @@ if __name__ == "__main__":
     
     logging.debug(f"Started {__file__} at 0.0.0.0:8000")
     
+    # 0.0.0.0 == every address
     app.run(
         debug=True, 
         host='0.0.0.0', 
