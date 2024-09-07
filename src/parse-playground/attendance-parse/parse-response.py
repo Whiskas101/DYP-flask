@@ -1,0 +1,172 @@
+
+from bs4 import BeautifulSoup
+
+
+response = """
+<script>
+    function read()
+    {
+        document.getElementById('readmore').style.display = 'block';
+        document.getElementById('readless').style.display = 'none';
+        document.getElementById('myDiv').style.display = 'none';
+    }
+    function loadXMLDoc(path)
+    {
+//alert(path);
+        document.getElementById('readmore').style.display = 'none';
+        document.getElementById('myDiv').style.display = 'block';
+        var xmlhttp;
+        if (window.XMLHttpRequest)
+        {
+            xmlhttp = new XMLHttpRequest();
+        }
+        else
+        {
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function ()
+        {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+            {
+                document.getElementById("myDiv").innerHTML = xmlhttp.responseText;
+            }
+        }
+        xmlhttp.open("GET", path + "/blocks/academic_status/more.php", true);
+        xmlhttp.send();
+    }
+</script>
+<div
+    style="width: 100%; margin: 10px 0; font-weight: bold; overflow: auto;color: #82152C;font-family: SourceSansPro-Semibold;">
+    <div style="float: left;">BAIML-2022-A</div>
+    <div style="float: right;">Semester V (08.07.24 to 10.12.24)</div>
+</div>
+<table class="generaltable">
+    <thead>
+        <tr>
+            <th class="header c0" style="text-align:left;" scope="col">Subject</th>
+            <th class="header c1" style="text-align:center;" scope="col">Total Classes</th>
+            <th class="header c2" style="text-align:center;" scope="col">Present</th>
+            <th class="header c3" style="text-align:center;" scope="col">Absent</th>
+            <th class="header c4 lastcol" style="text-align:center;" scope="col">Percentage(%)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="">
+            <td class="cell c0" style="text-align:left;">Computer Networks</td>
+            <td class="cell c1" style="text-align:center;"><a
+                    href="https://mydy.dypatil.edu/rait/local/attendance/studentreport.php?id=2588">19<img src="https://mydy.dypatil.edu/rait/theme/image.php/essential/block_stu_attendance/1722499618/eye" class="iconsmall" alt="enable"></img></a>
+            </td>
+            <td class="cell c2" style="text-align:center;">
+                <p class="present" stuid="10272" insid="2125" classid="6242" attenid="2588" statusid="7765">13</p>
+            </td>
+            <td class="cell c3" style="text-align:center;">
+                <p class="present" stuid="10272" insid="0" classid="6242" attenid="2588" statusid="7767">6</p>
+            </td>
+            <td class="cell c4 lastcol" style="text-align:center;">68.42</td>
+        </tr>
+        <tr class="">
+            <td class="cell c0" style="text-align:left;">Data Warehousing</td>
+            <td class="cell c1" style="text-align:center;"><a
+                    href="https://mydy.dypatil.edu/rait/local/attendance/studentreport.php?id=2591">24<img src="https://mydy.dypatil.edu/rait/theme/image.php/essential/block_stu_attendance/1722499618/eye" class="iconsmall" alt="enable"></img></a>
+            </td>
+            <td class="cell c2" style="text-align:center;">
+                <p class="present" stuid="10272" insid="2178" classid="6243" attenid="2591" statusid="7774">13</p>
+            </td>
+            <td class="cell c3" style="text-align:center;">
+                <p class="present" stuid="10272" insid="0" classid="6243" attenid="2591" statusid="7776">11</p>
+            </td>
+            <td class="cell c4 lastcol" style="text-align:center;">54.17</td>
+        </tr>
+        <tr class="">
+            <td class="cell c0" style="text-align:left;">DLO2-Business Intelligence</td>
+            <td class="cell c1" style="text-align:center;"><a
+                    href="https://mydy.dypatil.edu/rait/local/attendance/studentreport.php?id=2709">18<img src="https://mydy.dypatil.edu/rait/theme/image.php/essential/block_stu_attendance/1722499618/eye" class="iconsmall" alt="enable"></img></a>
+            </td>
+            <td class="cell c2" style="text-align:center;">
+                <p class="present" stuid="10272" insid="2147" classid="6244" attenid="2709" statusid="8128">14</p>
+            </td>
+            <td class="cell c3" style="text-align:center;">
+                <p class="present" stuid="10272" insid="0" classid="6244" attenid="2709" statusid="8130">4</p>
+            </td>
+            <td class="cell c4 lastcol" style="text-align:center;">77.78</td>
+        </tr>
+        <tr class="">
+            <td class="cell c0" style="text-align:left;">Institute Level Open Elective Technical ILOT1 (AIBA)</td>
+            <td class="cell c1" style="text-align:center;"><a
+                    href="https://mydy.dypatil.edu/rait/local/attendance/studentreport.php?id=2601">26<img src="https://mydy.dypatil.edu/rait/theme/image.php/essential/block_stu_attendance/1722499618/eye" class="iconsmall" alt="enable"></img></a>
+            </td>
+            <td class="cell c2" style="text-align:center;">
+                <p class="present" stuid="10272" insid="5909" classid="6246" attenid="2601" statusid="7804">21</p>
+            </td>
+            <td class="cell c3" style="text-align:center;">
+                <p class="present" stuid="10272" insid="0" classid="6246" attenid="2601" statusid="7806">5</p>
+            </td>
+            <td class="cell c4 lastcol" style="text-align:center;">80.77</td>
+        </tr>
+        <tr class="">
+            <td class="cell c0" style="text-align:left;">Introduction to Machine Learning</td>
+            <td class="cell c1" style="text-align:center;"><a
+                    href="https://mydy.dypatil.edu/rait/local/attendance/studentreport.php?id=2640">26<img src="https://mydy.dypatil.edu/rait/theme/image.php/essential/block_stu_attendance/1722499618/eye" class="iconsmall" alt="enable"></img></a>
+            </td>
+            <td class="cell c2" style="text-align:center;">
+                <p class="present" stuid="10272" insid="10922" classid="6313" attenid="2640" statusid="7921">22</p>
+            </td>
+            <td class="cell c3" style="text-align:center;">
+                <p class="present" stuid="10272" insid="0" classid="6313" attenid="2640" statusid="7923">4</p>
+            </td>
+            <td class="cell c4 lastcol" style="text-align:center;">84.62</td>
+        </tr>
+        <tr class="lastrow">
+            <td class="cell c0" style="text-align:left;">DLO1-Advance Database</td>
+            <td class="cell c1" style="text-align:center;"><a
+                    href="https://mydy.dypatil.edu/rait/local/attendance/studentreport.php?id=2687">6<img src="https://mydy.dypatil.edu/rait/theme/image.php/essential/block_stu_attendance/1722499618/eye" class="iconsmall" alt="enable"></img></a>
+            </td>
+            <td class="cell c2" style="text-align:center;">
+                <p class="present" stuid="10272" insid="3391" classid="6314" attenid="2687" statusid="8062">6</p>
+            </td>
+            <td class="cell c3" style="text-align:center;">
+                <p>--</p>
+            </td>
+            <td class="cell c4 lastcol" style="text-align:center;">100</td>
+        </tr>
+    </tbody>
+</table>
+"""
+
+
+soup = BeautifulSoup(response, 'lxml')
+
+# Order of data: Subject name, Total Classes, Present, Absent, Percentage
+
+# TO BE DONE!!!
+#Handling the case where theres null values in the output, and when theres no data at all (unauthorized or sem not created yet)
+
+subjects = soup.select('.cell')
+i = 0
+overall_attendance_data = []
+subject_attendance_data = {} 
+for column in subjects: 
+    value = column.get_text(strip=True) 
+    print(value)
+    choice = i%5
+    if value == '--':
+        value = 0
+    
+    match choice:
+        case 0:
+            # subject name
+            subject_attendance_data['subject'] = value 
+        case 1:
+            subject_attendance_data['total'] = value
+        case 2:
+            subject_attendance_data['present'] = value
+        case 3: 
+            subject_attendance_data['absent'] = value
+        case 4:
+            subject_attendance_data['percentage'] = value
+
+            overall_attendance_data.append(subject_attendance_data)
+            subject_attendance_data = {}
+    i = ( i + 1 ) % 5
+
+print(overall_attendance_data)
