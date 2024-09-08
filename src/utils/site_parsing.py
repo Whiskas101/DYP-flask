@@ -198,9 +198,54 @@ def parse_resource_link(html: str, link_type: str) -> str:
     
     
     
+def parse_attendance(html: str) -> list[dict]:
+    """
+      Takes in the HTML response object, and returns a list of JSON Subject Objects with the following data:
+      
+      - subject : subject name
+      - total : total no. of classes
+      - present : no. of classes attended
+      - absent : no. of classes missed
+      - percentage: ratio of present/absent 
+      
+    """ 
     
+     
+    soup = BeautifulSoup(html, 'lxml')
     
+    subjects = soup.select('.cell')
     
+    i = 0
+    overall_attendance_data = []
+    subject_attendance_data = {} 
+    for column in subjects: 
+        value = column.get_text(strip=True) 
+        # print(value)
+        choice = i%5
+        if value == '--':
+            value = 0
+        
+        match choice:
+            case 0:
+                subject_attendance_data['subject'] = value 
+            case 1:
+                subject_attendance_data['total'] = value
+            case 2:
+                subject_attendance_data['present'] = value
+            case 3: 
+                subject_attendance_data['absent'] = value
+            case 4:
+                # This indicates end of row, so add the collected data to the overall data 
+                subject_attendance_data['percentage'] = value
+
+                overall_attendance_data.append(subject_attendance_data)
+                subject_attendance_data = {}
+        i = ( i + 1 ) % 5
+
     
-    
-    
+    return overall_attendance_data  
+        
+        
+        
+        
+        

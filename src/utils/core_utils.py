@@ -155,4 +155,33 @@ def get_download_link(link : str, link_type, cookies):
         
         
     
-    
+def get_attendance_summary(cookies) -> list[dict]:
+    """
+        Fetches the link, parses and organises the data into a neat JSON array.
+        
+        Parameters:
+            link: link to be fetched
+            cookies: session data to persist
+        
+        Returns:
+            An Array of JSON Objects with the following attributes  
+
+            - subject : subject name
+            - total : total no. of classes
+            - present : no. of classes attended
+            - absent : no. of classes missed
+            - percentage: ratio of present/absent 
+    """
+
+
+    with requests.session() as session:
+
+        #Insert the session cookies
+        session.cookies = requests.utils.cookiejar_from_dict(cookie_dict=cookies)
+        response = session.get(SITE.ATTENDANCE_URL)
+        response = response.content
+        
+        attendance_data = PARSE.parse_attendance(response) 
+        if len(attendance_data) == 0:
+            return None       
+        return attendance_data

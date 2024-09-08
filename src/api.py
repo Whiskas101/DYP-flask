@@ -60,7 +60,10 @@ def login():
 @limiter.limit("3 per minute")
 def subjects():
 
-    cookies = session['session_cookie']
+    cookies = session.get('session_cookie')
+    if cookies == None:
+        return Response(status=401)
+    
     logging.debug(f"{cookies} obtained")
 
     response = core_utils.get_subjects(cookies=cookies)
@@ -73,7 +76,9 @@ def subject_material():
     if request.method == "POST":
         target_link = request.form.get('link') # this link must be of the form https://mydy.dypatil.edu/rait/course/view.php?id=[SUBJECT_ID]
 
-        cookies = session['session_cookie']
+        cookies = session.get('session_cookie')
+        if cookies == None:
+            return Response(status=401)
         
         response = core_utils.get_subject_materials(target_link, cookies=cookies)
         
@@ -87,7 +92,10 @@ def download_resource():
         target_link = request.form.get('link') #this link must be of the form https://https://mydy.dypatil.edu/rait/mod/flexpaper/view.php?id=606779
                                                 # or https://mydy.dypatil.edu/rait/mod/presentation/view.php?id=611990
         link_type = request.form.get('type')
-        cookies = session['session_cookie']
+        
+        cookies = session.get('session_cookie')
+        if cookies == None:
+            return Response(status=401)
         
         response = core_utils.get_download_link(target_link, link_type, cookies)
         
@@ -95,7 +103,24 @@ def download_resource():
             return response
 
         return Response(status=401)
+   
+@app.route('/attendance', methods=['GET']) 
+@limiter.limit("5 per minute")
+def fetch_attendance_summary():
     
+    cookies = session.get('session_cookie')
+    if cookies == None:
+        return Response(status=401)
+    
+    response = core_utils.get_attendance_summary(cookies=cookies)
+    
+    if response == None:
+        return Response(status=404)
+    
+    return response
+    
+    
+     
         
 if __name__ == "__main__":
     
