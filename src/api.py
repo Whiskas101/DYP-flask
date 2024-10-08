@@ -56,8 +56,12 @@ def hello_warudo():
 @app.route('/healthcheck')
 @limiter.limit("100 per minute")
 def healthcheck():
-    return kuma_api.get_heartbeats()
-    
+    fdy_monitor = kuma_api.get_monitor_beats(1, 24)
+    lms_monitor = kuma_api.get_monitor_beats(2, 24)
+    return {
+        'fdy_api':fdy_monitor, 
+        'lms_api':lms_monitor
+    }
 
 @app.route('/login', methods=['POST'])
 @limiter.limit("6 per minute")
