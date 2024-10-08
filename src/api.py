@@ -12,6 +12,10 @@ from flask_limiter.util import get_remote_address
 # exists within this module
 from utils import core_utils
 
+#metadata
+from uptime_kuma_api import UptimeKumaApi, MonitorType
+from utils.SITE import KUMA_USER, KUMA_PASS, KUMA_URL
+
 app = Flask(__name__)
 app.secret_key = 'this_college_fucking_sucks'
 
@@ -27,6 +31,20 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 
+# will lead to N number of instances being created when using gunicorn with N number
+# of workers, but eh
+kuma_api = UptimeKumaApi(
+    url=KUMA_URL
+)
+
+try:
+    kuma_api.login(username=KUMA_USER, password=KUMA_PASS)
+    logging.debug("Logged into uptime-kuma")
+except Exception as e:
+    print(f"Login failed: {e}")
+    exit()
+
+
 @app.route('/')
 @limiter.limit("100 per minute")
 def hello_warudo():
@@ -34,6 +52,12 @@ def hello_warudo():
         向かって来るのか？\n
         ザワールドー
     '''
+    
+@app.route('/healthcheck')
+@limiter.limit("100 per minute")
+def healthcheck():
+    return kuma_api.get_heartbeats()
+    
 
 @app.route('/login', methods=['POST'])
 @limiter.limit("6 per minute")
@@ -102,6 +126,7 @@ def download_resource():
             return response
 
         return Response(status=401)
+    
    
 @app.route('/attendance', methods=['GET']) 
 @limiter.limit("5 per minute")
