@@ -1,7 +1,6 @@
 #for logging
 import logging
 
-
 # main entry point for the app
 from flask import Flask, request, session, Response
 
@@ -113,7 +112,7 @@ def fetch_attendance_summary():
         return Response(status=401)
     
     response = core_utils.get_attendance_summary(cookies=cookies)
-    
+    # print(response) 
     if response == None:
         return Response(status=404)
     

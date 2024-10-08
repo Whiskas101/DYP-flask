@@ -3,3 +3,5 @@ SITE.py
 
 #Virtual environment stuff
 venv
+
+__pycache__/

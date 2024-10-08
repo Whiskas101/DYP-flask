@@ -209,7 +209,6 @@ def parse_attendance(html: str) -> list[dict]:
       - percentage: ratio of present/absent 
       
     """ 
-    
      
     soup = BeautifulSoup(html, 'lxml')
     

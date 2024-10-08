@@ -33,9 +33,8 @@ def attempt_login(username:str, password:str, session = None):
         )
         
         #response.close() #instantly close the response, as we dont need the 80,000+ character response that contains irrelevant data (html, inline css, and javascript)
-        # print("NEG!!!====",response.content)
         
-        
+        print(response.content) 
         #Successful login
         if response.status_code == 200:
             
@@ -182,6 +181,7 @@ def get_attendance_summary(cookies) -> list[dict]:
         response = response.content
         
         attendance_data = PARSE.parse_attendance(response) 
+
         if len(attendance_data) == 0:
             return None       
         return attendance_data
