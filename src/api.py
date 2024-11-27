@@ -13,8 +13,8 @@ from flask_limiter.util import get_remote_address
 from utils import core_utils
 
 #metadata
-from uptime_kuma_api import UptimeKumaApi, MonitorType
-from utils.SITE import KUMA_USER, KUMA_PASS, KUMA_URL
+#from uptime_kuma_api import UptimeKumaApi
+#from utils.SITE import KUMA_USER, KUMA_PASS, KUMA_URL
 
 app = Flask(__name__)
 app.secret_key = 'this_college_fucking_sucks'
@@ -33,16 +33,17 @@ logging.basicConfig(
 
 # will lead to N number of instances being created when using gunicorn with N number
 # of workers, but eh
-kuma_api = UptimeKumaApi(
-    url=KUMA_URL
-)
+# kuma_api = UptimeKumaApi(
+#     url=KUMA_URL
+# )
 
-try:
-    kuma_api.login(username=KUMA_USER, password=KUMA_PASS)
-    logging.debug("Logged into uptime-kuma")
-except Exception as e:
-    print(f"Login failed: {e}")
-    exit()
+# try:
+#     kuma_api.login(username=KUMA_USER, password=KUMA_PASS)
+#     logging.debug("Logged into uptime-kuma")
+# except Exception as e:
+#     logging.warning(f"Login failed: {e}")
+#     print(e)
+#     exit()
 
 
 @app.route('/')
@@ -56,12 +57,16 @@ def hello_warudo():
 @app.route('/healthcheck')
 @limiter.limit("100 per minute")
 def healthcheck():
-    fdy_monitor = kuma_api.get_monitor_beats(1, 24)
-    lms_monitor = kuma_api.get_monitor_beats(2, 24)
-    return {
-        'fdy_api':fdy_monitor, 
-        'lms_api':lms_monitor
-    }
+    # fdy_monitor = kuma_api.get_monitor_beats(1, 24)
+    # lms_monitor = kuma_api.get_monitor_beats(2, 24)
+    
+
+    # return {
+    #     'fdy_api':fdy_monitor, 
+    #     'lms_api':lms_monitor
+    # }
+    
+    return "kuma is disabled temporarily"
 
 @app.route('/login', methods=['POST'])
 @limiter.limit("6 per minute")
@@ -75,6 +80,7 @@ def login():
         response = core_utils.attempt_login(username=username, password=password)
         # print(response)
         #set the session cookie obtained previously
+        print("login response: ", response)
         if response != None:
             session['session_cookie'] = response
             return response
@@ -133,9 +139,9 @@ def download_resource():
     
    
 @app.route('/attendance', methods=['GET']) 
-@limiter.limit("5 per minute")
+@limiter.limit("1000 per minute")
 def fetch_attendance_summary():
-    
+
     cookies = session.get('session_cookie')
     if cookies == None:
         return Response(status=401)
@@ -156,7 +162,7 @@ if __name__ == "__main__":
     
     # 0.0.0.0 == every address
     app.run(
-        debug=True, 
+        debug=False, 
         host='0.0.0.0', 
         port=8000
     )

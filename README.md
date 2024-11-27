@@ -35,9 +35,9 @@ The following were used while working on this project:
  - mitmproxy (for finding endpoints, hidded/obfuscated by redirects)
  - BeautifulSoup with lxml (for extracting data from SSR'ed HTML response, into a `JSON` Object)
 
-### To Do
--❌ Complete this readme.md file
--❌Handle different types of links: flexpaper, presentation, docx, redirected page with downloadable links
--✅ Rate Limiting, to prevent abuse 
+## To Do
+    - ❌ Complete this readme.md file
+    - ✅ Handle different types of links: flexpaper, presentation, docx, redirected page with downloadable links
+    - ✅ Rate Limiting, to prevent abuse 
 
 

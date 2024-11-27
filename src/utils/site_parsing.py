@@ -24,7 +24,7 @@ def parse_subjects(html: str) -> list[dict]:
     subjects = []
     
     subject_containers = soup.find_all(class_="subcontent-container")
-    print(len(subject_containers))
+    # print(len(subject_containers))
 
     for subject in subject_containers:
         #convert to raw string, so it can be parsed after being converted to BS4
@@ -226,16 +226,16 @@ def parse_attendance(html: str) -> list[dict]:
         
         match choice:
             case 0:
-                subject_attendance_data['subject'] = value 
+                subject_attendance_data['subject'] = str(value) 
             case 1:
-                subject_attendance_data['total'] = value
+                subject_attendance_data['total'] = str(value)
             case 2:
-                subject_attendance_data['present'] = value
+                subject_attendance_data['present'] = str(value)
             case 3: 
-                subject_attendance_data['absent'] = value
+                subject_attendance_data['absent'] = str(value)
             case 4:
                 # This indicates end of row, so add the collected data to the overall data 
-                subject_attendance_data['percentage'] = value
+                subject_attendance_data['percentage'] = str(value)
 
                 overall_attendance_data.append(subject_attendance_data)
                 subject_attendance_data = {}

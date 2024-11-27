@@ -34,7 +34,7 @@ def attempt_login(username:str, password:str, session = None):
         
         #response.close() #instantly close the response, as we dont need the 80,000+ character response that contains irrelevant data (html, inline css, and javascript)
         
-        print(response.content) 
+        # print(response.content) 
         #Successful login
         if response.status_code == 200:
             
