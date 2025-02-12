@@ -151,7 +151,7 @@ def download_resource():
     
    
 @app.route('/attendance', methods=['GET']) 
-@limiter.limit("1000 per minute")
+@limiter.limit("15 per minute")
 def fetch_attendance_summary():
 
     cookies = session.get('session_cookie')
@@ -166,6 +166,20 @@ def fetch_attendance_summary():
     return response
     
     
+@app.route('/timetable', methods=['GET']) 
+@limiter.limit("15 per minute")
+def fetch_timetable():
+
+    cookies = session.get('session_cookie')
+    if cookies == None:
+        return Response(status=401)
+    
+    response = core_utils.get_timetable(cookies=cookies)
+    # print(response) 
+    if response == None:
+        return Response(status=404)
+    
+    return response
      
         
 if __name__ == "__main__":

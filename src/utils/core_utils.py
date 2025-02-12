@@ -185,3 +185,33 @@ def get_attendance_summary(cookies) -> list[dict]:
         if len(attendance_data) == 0:
             return None       
         return attendance_data
+    
+    
+def get_timetable(cookies) -> list[dict]:
+    """
+        Fetches the link, parses and organises the timetable data into a neat JSON array.
+        
+        Parameters:
+            link: link to be fetched
+            cookies: session data to persist
+        
+        Returns:
+            An nested json with the following attributes  
+            - Class [eg. BAIML-2022-A]
+            - Semester Information [eg. Semester VI (06.01.25 to 26.04.25)]
+            - Timetable ==> Array of day objects, which comprise of
+                - time-period, subject_name, room as key value pairs
+    """
+
+
+    with requests.session() as session:
+
+        #Insert the session cookies
+        session.cookies = requests.utils.cookiejar_from_dict(cookie_dict=cookies)
+        response = session.get(SITE.TIMETABLE_URL)
+        response = response.content
+        
+        timetable_data : dict = PARSE.parse_timetable(response) 
+        if(timetable_data.get('timetable') is None):
+            return None
+        return timetable_data
