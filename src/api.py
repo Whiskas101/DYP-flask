@@ -4,6 +4,9 @@ import logging
 # main entry point for the app
 from flask import Flask, request, session, Response
 
+# for handling cookie storage
+from flask_cors import CORS
+
 # For rate limiting the API
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -18,6 +21,13 @@ from utils import core_utils
 
 app = Flask(__name__)
 app.secret_key = 'this_college_fucking_sucks'
+
+app.config['SESSION_COOKIE_SECURE'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+CORS(app, supports_credentials=True, origins=[
+    'http://localhost:58391' 
+])
+
 
 limiter = Limiter(
     key_func=get_remote_address,
@@ -88,6 +98,8 @@ def login():
 
         #return the cookies of the session object, or the status code if it fails to login
         return Response(status=401)
+
+
 
 @app.route('/subjects', methods=['GET'])
 @limiter.limit("3 per minute")
@@ -166,9 +178,6 @@ if __name__ == "__main__":
         host='0.0.0.0', 
         port=8000
     )
-
-
-
 
 
 

@@ -12,7 +12,7 @@ def parse_subjects(html: str) -> list[dict]:
             html (str): string object containing the response content (html, inline-css & inline-js code)
             
         Returns:
-            subjects (list[dict]): List of dictionary object containing the subject details:\n
+            subjects (list[dict]): List of dictionary object containing the subject details:
                 \t- Name
                 \t- Instructor
                 \t- Attendance
@@ -101,7 +101,7 @@ def parse_materials(html : str) -> list[dict]:
             doc_type = obj[0].contents[0]
         # else:
             # print(obj)
-        #The handling for the different potential scenarios regarding the way the download links have to be made available is 
+        # The handling for the different potential scenarios regarding the way the download links have to be made available is 
         # to be seperated from this request.
         activity_object = {
             'name':name,
