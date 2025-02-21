@@ -211,7 +211,7 @@ def get_timetable(cookies) -> list[dict]:
         response = session.get(SITE.TIMETABLE_URL)
         response = response.content
         
-        timetable_data : dict = PARSE.parse_timetable(response) 
-        if(timetable_data.get('timetable') is None):
+        timetable_data = PARSE.parse_timetable(response) 
+        if(timetable_data is None):
             return None
         return timetable_data

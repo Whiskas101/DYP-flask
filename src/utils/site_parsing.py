@@ -261,10 +261,13 @@ def parse_timetable(html: str) -> list[dict]:
     overall_timetable_data = {}
 
 
-    class_data = [x.get_text() if x is not None else "" for x in soup.select_one('div').select('div')]
-    
-    overall_timetable_data['class'] = class_data[0]
+    class_data = [x.get_text() if x is not None else None for x in soup.select_one('div').select('div')]
+
+    if(class_data[0] is None or class_data[1] is None):
+        return None
+    overall_timetable_data['class'] = class_data[0] 
     overall_timetable_data['semester'] = class_data[1]
+    
 
 
 
@@ -309,10 +312,11 @@ def parse_timetable(html: str) -> list[dict]:
         
 
     i = 0
-    temp_timetable = {}
+    #temp_timetable = {}
+    temp_timetable_data = []
     temp_day_array = []
     temp_day_name = ""
-    for day in days: 
+    for day in days: # this is a very misleading iteration [to fix naming later] 
         match i:
             case 0:
                 # print("\nday : ", day.get_text(strip=True)) # <td class="cell c0" style="text-align:left;">Mon</td>
@@ -329,9 +333,8 @@ def parse_timetable(html: str) -> list[dict]:
         if i == 8 : 
             # The entire day has been parsed
             # push the day's data into the overall timetable
-            # print(temp_day_array)
-            
-            temp_timetable[temp_day_name] = temp_day_array
+
+            overall_timetable_data[temp_day_name] = {"data":temp_day_array}
             
             # resetting the temp variables 
             temp_day_array = []
@@ -342,7 +345,7 @@ def parse_timetable(html: str) -> list[dict]:
         # break 
         
 
-    overall_timetable_data['timetable'] = temp_timetable
+    # overall_timetable_data['timetable'] = temp_timetable_data
     # print(json.dumps(overall_timetable_data, indent=6))
 
     return overall_timetable_data
