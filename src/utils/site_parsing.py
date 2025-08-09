@@ -38,7 +38,7 @@ def parse_subjects(html: str) -> list[dict]:
 
         #Instructor
         subject_instructor = soup.select_one('.istruinfocontainer > div') # probably meant to write "instructor-info-container" but you never know 💀
-        subject_instructor = subject_instructor.contents[0]
+        subject_instructor = subject_instructor.contents[0] if subject_instructor != None else "Unknown"
 
         #Subject Attendance
         subject_attendance = soup.select_one('.prg-container > span') #progress container is the weird horizontal graph thingy
